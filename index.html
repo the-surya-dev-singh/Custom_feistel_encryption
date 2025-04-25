@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Password Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        .container { width: 300px; margin: 0 auto; }
+        .form-container { display: none; }
+        .btn { padding: 10px; margin: 5px; cursor: pointer; }
+        .message { color: green; margin-bottom: 10px; }
+        .error { color: red; margin-bottom: 10px; }
+    </style>
+    <script>
+        function toggleForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+        function toggleBack() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="{{ 'message' if category == 'success' else 'error' }}">{{ message }}</div>
+                    {% if category == 'success' and message == 'Login successful!' %}
+                        <script>
+                            window.location.href = "success.html";
+                        </script>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div id="login-form">
+            <h2>Login</h2>
+            <form method="POST" action="/login">
+                <input type="text" name="username" placeholder="Username" required><br><br>
+                <input type="password" name="password" placeholder="Password" required><br><br>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <button onclick="toggleForm()" class="btn">Register</button>
+        </div>
+
+        <div id="register-form" class="form-container">
+            <h2>Register</h2>
+            <form method="POST" action="/register">
+                <input type="text" name="username" placeholder="Username" required><br><br>
+                <input type="password" name="password" placeholder="Password" required><br><br>
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <button onclick="toggleBack()" class="btn">Back to Login</button>
+        </div>
+    </div>
+</body>
+</html>
